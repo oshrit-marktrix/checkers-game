@@ -5,7 +5,6 @@ let selectedPiece;
 const boardEl = document.createElement("table");
 let imgURL =
 {
-  // blackpiece: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/5c837aac7c42de1f9f125cff37ab2c70-1612076004546/fiverr-og-logo.png",
   queenblackpiece: "./piece/queenblackpiece.png",
   whitepiece: "./PIECES/whitepiece.png",
   queenwhitepiece: "./PIECES/queenwhitepiece.png"
