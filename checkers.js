@@ -1,58 +1,54 @@
-BoardSize = 8
-let imgSrc =
+BOARD_SIZE = 8
+let selectedCell;
+let selectedPiece;
+
+const boardEl = document.createElement("table");
+let imgURL =
 {
-  blackpiece: "./PIECES/blackpiece.png",
-  queenblackpiece: "./PIECES/queenblackpiece.png",
+  // blackpiece: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/5c837aac7c42de1f9f125cff37ab2c70-1612076004546/fiverr-og-logo.png",
+  queenblackpiece: "./piece/queenblackpiece.png",
   whitepiece: "./PIECES/whitepiece.png",
   queenwhitepiece: "./PIECES/queenwhitepiece.png"
 }
-table = document.createElement("table");
 function createBoard() {
-  document.body.appendChild(table);
-  table.className = "table"
-  for (let i = 0; i < BoardSize; i++) {
-    const row = table.insertRow();
-    for (let j = 0; j < BoardSize; j++) {
-      const cell = row.insertCell();
-      cell.id = i.toString() + " " + j.toString();
-      if ((i + j) % 2 == 0) {
-
-        cell.classList.add("black")
+  boardEl.classList.add("Board");
+  document.body.appendChild(boardEl);
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    let rowElement = boardEl.insertRow();
+    for (let col = 0; col < BOARD_SIZE; col++) {
+      let cellElement = rowElement.insertCell();
+      if ((row + col) % 2 === 0) {
+        cellElement.classList.add("white");
       } else {
-        cell.classList.add("white");
+        cellElement.classList.add("black");
       }
-      // cellElement.addEventListener('click', () => onCellClick(row, col));
+      cellElement.addEventListener('click', () => onCellClick(row, col));
     }
   }
+  boardData = new BoardData();
 }
-createBoard();
-class Pieces {
-  constructor(row, col, type, color, imgSrc) {
+
+window.addEventListener('load', createBoard);
+
+class Piece {
+  constructor(row, col, color, imgURL) {
     this.row = row;
     this.col = col;
-    this.type = type;
     this.color = color;
-    this.imgSrc = this.imgToPlayer(imgSrc);
+    this.imgToPlayer(imgURL);
   }
-
-  imgToPlayer(Src) {//tag the img to player element
+  imgToPlayer(url) {//tag the img to player element
     let newEl = document.createElement("img");
-    newEl.src = Src;
-    let cell = table.rows[this.row].cells[this.col];
-    cell.appendChild(newEl)
-    for (let i = 0; i < 3; i += 1) {
-      for (let j = i % 2; j < 8; j += 2) {
-        (this.color == 'whitepiece')
-      }
-      newEl.classList.add('upSide')
-    }
-    return newEl;
+    newEl.src = url;
+    let cell = boardEl.rows[this.row].cols[this.col];
+    cell.appendChild(newEl);
+    console.log(rows);
   }
 }
 
-class boardData {
-  constructor(pieces) {
-    this.pieces = this.getPieces()(pieces);
+class BoardData {
+  constructor() {
+    this.pieces = this.getPieces();
   }
 
   getPlace(row, col) {
@@ -62,13 +58,21 @@ class boardData {
       }
     }
   }
-
   getPieces() {
     let result = [];
-    result.push(new Pieces(i, j, '', 'blackpiece', imgSrc.blackpiece))
-    result.push(new Pieces(6, 2, '', 'whitepiece', imgSrc.whitePawnImg))
+    for (let i = 0; i < 3; i += 1) {
+      for (let j = i % 2; j < 8; j += 2) {
+        result.push(new Piece(i, j, 'black', 'black_player', imgURL.blackpiece))
+      }
+    }
+    return result;
+  }
+
+  imgToPlayer() {
+    let result = [];
+    result.push(new Piece(1, 3, "blackpiece", imgURL.blackpiece))
+    result.push(new Piece(6, 2, 'whitepiece', imgURL.whitePawnImg))
     return result;
   }
 }
-console.log(Pieces);
 
