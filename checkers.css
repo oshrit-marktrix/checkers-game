@@ -1,25 +1,7 @@
-.table {
-    justify-self: center;
-}
-
-.table {
-    margin: 0 auto;
-    margin-top: 20px;
-    border: 20px solid rgb(108, 114, 114);
-}
-
-td {
-    vertical-align: middle;
-    text-align: center;
-    width: 60px;
-    height: 60px;
-    outline: solid rgb(47, 63, 78);
-    justify-self: center;
-}
-
 .black {
     background-image: url(./PIECES/blackbackground.png);
 }
+
 
 
 body {
@@ -27,5 +9,96 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin: 10px;
+    user-select: none;
+    background-color: rgb(39, 57, 65);
+    margin: 40px;
+}
+
+h1 {
+    text-decoration: underline black;
+}
+
+/* .Player-1 {
+    text-align: center;
+    background: rgba(73, 9, 129, 0.4);
+    outline: solid 3px rgba(223, 239, 243, 0.2);
+    padding: 10px 25px;
+    margin: 0px 10px;
+    font-weight: 550;
+    font-size: 1.3rem;
+    border-radius: 10px;
+}
+
+.Player-2 {
+    text-align: center;
+    background: rgba(73, 9, 129, 0.4);
+    outline: solid 3px rgba(223, 239, 243, 0.2);
+    padding: 10px 25px;
+    margin: 0px 10px;
+    font-weight: 550;
+    font-size: 1.3rem;
+    border-radius: 10px; */
+/* } */
+
+/* 
+.player--active {
+    background-color: rgba(73, 9, 129);
+    outline: solid 3px rgb(223, 239, 243);
+    text-decoration: underline black;
+} */
+
+
+.chessBoard {
+    position: relative;
+    text-align: center;
+    margin-top: 10px;
+    border: 7px solid black;
+
+}
+
+.black {
+    width: 60px;
+    height: 60px;
+    background-color: gray;
+    text-align: center;
+    user-select: none;
+
+}
+
+.white {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    font-size: 40px;
+    text-align: center;
+    user-select: none;
+
+}
+
+img {
+    width: 50px;
+    height: 50px;
+}
+
+.upSide {
+    transform: scaleY(-1);
+}
+
+.selected {
+    background-color: rgb(65, 66, 73);
+}
+
+.possible-move {
+    background-color: rgb(138, 163, 185);
+}
+
+.winner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 50px;
+    border-radius: 10px;
+    width: max-content;
 }
