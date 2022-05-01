@@ -1,5 +1,7 @@
-.black {
+.light {
     background-image: url(./PIECES/blackbackground.png);
+    width: 65px;
+    height: 65px;
 }
 
 
@@ -11,7 +13,7 @@ body {
     flex-direction: column;
     user-select: none;
     background-color: rgb(39, 57, 65);
-    margin: 40px;
+    margin: 10px;
 }
 
 h1 {
@@ -29,16 +31,15 @@ h1 {
 .black {
     width: 60px;
     height: 60px;
-    background-color: gray;
     text-align: center;
     user-select: none;
 
 }
 
-.white {
-    width: 60px;
-    height: 60px;
-    background-color: white;
+.dark {
+    width: 65px;
+    height: 65px;
+    background-color: rgb(164, 164, 175);
     font-size: 40px;
     text-align: center;
     user-select: none;
@@ -46,14 +47,14 @@ h1 {
 }
 
 img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 }
 
 .selected {
-    background-color: rgb(65, 66, 73);
+    background-color: rgb(57, 58, 61);
 }
 
 .possible-move {
-    background-color: rgb(138, 163, 185);
+    background-color: rgb(73, 90, 105);
 }
