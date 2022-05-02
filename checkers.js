@@ -1,3 +1,4 @@
+
 class Pieces {
   constructor(row, col, type, player, imgUrl) {
     this.row = row;
@@ -42,6 +43,8 @@ class Pieces {
       const absoluteCol = move[1];
       if (absoluteRow >= 0 && absoluteRow <= 7 && absoluteCol >= 0 && absoluteCol <= 7) {
         filteredMoves.push(move);
+
+
       }
     }
     return filteredMoves;
@@ -50,7 +53,7 @@ class Pieces {
   getMovesInDirection(directionRow, directionCol, boardData) {
     let result = [];
     if (this.type === 'white' || this.type === 'black') {
-      for (let i = 1; i < BOARD_SIZE; i++) {
+      for (let i = 1; i < 2; i++) {
         let row = this.row + directionRow;
         let col = this.col + directionCol;
         if (boardData.getPiece(row, col) === undefined) {
@@ -77,17 +80,49 @@ class Pieces {
       return result;
     }
   }
+  checking() {
+    let result = [false, false]
+    if (currentPosition[1] !== 7) {
+      let cell = document.getElementById(`${currentPosition[0] - 1} ${currentPosition[1] + 1}`).getElementsByClassName('black')[0]
+      if (cell) {
+        result[0] = true;
+      }
+    }
+    if (currentPosition[1] !== 0) {
+      cell = document.getElementById(`${currentPosition[0] - 1} ${currentPosition[1] - 1}`).getElementsByClassName('black')[0]
+      if (cell) {
+        result[1] = true;
+      }
+      return result
+    }
+  }
   getwhiteMoves() {
+    let checkes = this.checking();
     let result = [];
-    result = result.concat(this.getMovesInDirection(-1, 1, boardData));
-    result = result.concat(this.getMovesInDirection(-1, -1, boardData));
+    if (checkes[1]) result = result.concat(this.getMovesInDirection(-2, -2, boardData));
+    else result = result.concat(this.getMovesInDirection(-1, -1, boardData));
+    if (checkes[0]) result = result.concat(this.getMovesInDirection(-2, 2, boardData));
+    else result = result.concat(this.getMovesInDirection(-1, 1, boardData));
+
     return result;
+  }
+  getwhiteEatMoves() {
+    let result = [];
+    return result;
+
   }
   getblackMoves() {
     let result = [];
     result = result.concat(this.getMovesInDirection(1, 1, boardData))
     result = result.concat(this.getMovesInDirection(1, -1, boardData))
     return result;
+  }
+  getblackEatMoves() {
+    let result = [];
+    result = result.concat(this.getMovesInDirection(2, 2, boardData));
+    result = result.concat(this.getMovesInDirection(2, -2, boardData));
+    return result;
+
   }
   getQueenMoves() {
     let result = [];
@@ -107,7 +142,10 @@ class Pieces {
     return result;
 
   }
+  // checkEat(player) {
+  //   if (){}
 
+  // }
 }
 class BoardData {//the start of the game and adding the Pieces to the board.
   constructor(firstPlayer) {
@@ -137,7 +175,7 @@ class BoardData {//the start of the game and adding the Pieces to the board.
     selectedCell = boardEl.rows[row].cells[col];
     // If the cell - is in the possibleMoves list [[2,1], [1,0]]
     if (piece.getPossibleMoves().some(element => element.toString() === [row, col].toString())) {
-      let removedPiece = this.removePiece(row, col);
+      this.removePiece(row, col);
       // Remove img if there is a piece. Better than removeChild for case of empty cells.
       selectedCell.innerHTML = ''
       // Update new piece's position to the selected cell:
@@ -213,23 +251,24 @@ let imgURLsObj =
 let selectedCell;
 let boardData;
 let selectedPiece;
-
+let cell;
 const BOARD_SIZE = 8;
 const boardEl = document.createElement("table");
-
+let currentPosition;
 function createMainBoard() {
   boardEl.classList.add("mainBoard");
   document.body.appendChild(boardEl);
   for (let row = 0; row < BOARD_SIZE; row++) {
     let rowElement = boardEl.insertRow();
     for (let col = 0; col < BOARD_SIZE; col++) {
-      let cellElement = rowElement.insertCell();
+      cell = rowElement.insertCell();
+      cell.id = row.toString() + " " + col.toString();
       if ((row + col) % 2 === 0) {
-        cellElement.classList.add("dark");
+        cell.classList.add("dark");
       } else {
-        cellElement.classList.add("light");
+        cell.classList.add("light");
       }
-      cellElement.addEventListener('click', () => onCellClick(row, col));
+      cell.addEventListener('click', () => onCellClick(row, col));
     }
   }
   boardData = new BoardData('white_player');
@@ -238,6 +277,7 @@ function createMainBoard() {
 window.addEventListener('load', createMainBoard);
 
 function onCellClick(row, col) {
+  currentPosition = [row, col]
   selectedCell = boardEl.rows[row].cells[col];
 
   if (selectedPiece !== undefined && boardData.tryMove(selectedPiece, row, col)) {
@@ -253,4 +293,9 @@ function onCellClick(row, col) {
     selectedCell.classList.add('selected');
     selectedPiece = piece;
   }
-} 
+  // } console.log(cell);
+  // function royalty() {
+  //   if (col) {
+
+  //   }
+}
