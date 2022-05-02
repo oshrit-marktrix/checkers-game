@@ -29,123 +29,112 @@ class Pieces {
     let moves;
 
     let findMovesFunc = {
-      'white': 'getwhiteMoves',
-      'black': 'getblackMoves',
-      'queen': 'getQueenMoves',
-      'king': 'getKingMoves',
+      'white': ['getwhiteMoves'],
+      'black': ['getblackMoves'],
+      'queen': ['getQueenMoves'],
+      'king': ['getKingMoves'],
     }
 
-    moves = this[findMovesFunc[this.type]]() // Call the function and get a List of the relative and absolute moves of this piece.
+    moves = [];
+    for (let move of findMovesFunc[this.type]) {
 
-    let filteredMoves = [];
-    for (let move of moves) {
-      const absoluteRow = move[0];
-      const absoluteCol = move[1];
-      if (absoluteRow >= 0 && absoluteRow <= 7 && absoluteCol >= 0 && absoluteCol <= 7) {
-        filteredMoves.push(move);
-
-
-      }
+      moves = moves.concat(this[move]()); // Call the function and get a List of the relative and absolute moves of this piece.
     }
-    return filteredMoves;
+
+    return moves;
+    // let filteredMoves = [];
+    // for (let move of moves) {
+    //   const absoluteRow = move[0];
+    //   const absoluteCol = move[1];
+    //   if (absoluteRow >= 0 && absoluteRow <= 7 && absoluteCol >= 0 && absoluteCol <= 7) {
+    //     filteredMoves.push(move);
+
+
+    //   }
+    // }
+    // return filteredMoves;
   }
 
-  getMovesInDirection(directionRow, directionCol, boardData) {
+  getMovesInDirection(directionRow, directionCol, limit, boardData) {
     let result = [];
-    if (this.type === 'white' || this.type === 'black') {
-      for (let i = 1; i < 2; i++) {
-        let row = this.row + directionRow;
-        let col = this.col + directionCol;
+    //if (this.type === 'white' || this.type === 'black') {
+    for (let i = 1; i <= limit; i++) {
+      let row = this.row + i * directionRow;
+      let col = this.col + i * directionCol;
+      if (row <= 7 && 0 <= row && 0 <= col && col <= 7) {
+
         if (boardData.getPiece(row, col) === undefined) {
           result.push([row, col]);
-        } else if (this.player !== boardData.getPiece(row, col).player) {
-          result.push([row, col]);
-          return result;
-        } else if (this.player === boardData.getPiece(row, col).player) {
-          return result;
+          //} else //if (this.player !== boardData.getPiece(row, col).player) {
+          //result.push([row, col]);
+          //return result;
+          // } else if (this.player === boardData.getPiece(row, col).player) {
+          //   return result;
         }
       }
-      return result;
-    } else {
-      let row = this.row + directionRow;
-      let col = this.col + directionCol;
-      if (boardData.getPiece(row, col) === undefined) {
-        result.push([row, col]);
-      } else if (this.player !== boardData.getPiece(row, col).player) {
-        result.push([row, col]);
-        return result;
-      } else if (this.player === boardData.getPiece(row, col).player) {
-        return result;
-      }
-      return result;
-    }
-  }
-  checking() {
-    let result = [false, false]
-    if (currentPosition[1] !== 7) {
-      let cell = document.getElementById(`${currentPosition[0] - 1} ${currentPosition[1] + 1}`).getElementsByClassName('black')[0]
-      if (cell) {
-        result[0] = true;
+      else {
+        break;
       }
     }
-    if (currentPosition[1] !== 0) {
-      cell = document.getElementById(`${currentPosition[0] - 1} ${currentPosition[1] - 1}`).getElementsByClassName('black')[0]
-      if (cell) {
-        result[1] = true;
-      }
-      return result
-    }
+    return result;
+    // } else {
+    //   let row = this.row + directionRow;
+    //   let col = this.col + directionCol;
+    //   if (boardData.getPiece(row, col) === undefined) {
+    //     result.push([row, col]);
+    //   } else if (this.player !== boardData.getPiece(row, col).player) {
+    //     result.push([row, col]);
+    //     return result;
+    //   } else if (this.player === boardData.getPiece(row, col).player) {
+    //     return result;
+    //   }
+    //   return result;
+    // }
   }
   getwhiteMoves() {
-    let checkes = this.checking();
     let result = [];
-    if (checkes[1]) result = result.concat(this.getMovesInDirection(-2, -2, boardData));
-    else result = result.concat(this.getMovesInDirection(-1, -1, boardData));
-    if (checkes[0]) result = result.concat(this.getMovesInDirection(-2, 2, boardData));
-    else result = result.concat(this.getMovesInDirection(-1, 1, boardData));
-
+    result = result.concat(this.getMovesInDirection(-1, 1, 2, boardData));
+    result = result.concat(this.getMovesInDirection(-1, -1, 2, boardData));
     return result;
   }
-  getwhiteEatMoves() {
-    let result = [];
-    return result;
+  // getwhiteEatMoves() {
+  //   let result = [];
+  //   result = result.concat(this.getMovesInDirection(-2, 2, boardData));
+  //   result = result.concat(this.getMovesInDirection(-2, -2, boardData));
+  //   return result;
 
-  }
+  // }
   getblackMoves() {
     let result = [];
-    result = result.concat(this.getMovesInDirection(1, 1, boardData))
-    result = result.concat(this.getMovesInDirection(1, -1, boardData))
+    result = result.concat(this.getMovesInDirection(1, 1, 2, boardData))
+    result = result.concat(this.getMovesInDirection(1, -1, 2, boardData))
     return result;
   }
-  getblackEatMoves() {
-    let result = [];
-    result = result.concat(this.getMovesInDirection(2, 2, boardData));
-    result = result.concat(this.getMovesInDirection(2, -2, boardData));
-    return result;
+  // getblackEatMoves() {
+  //   let result = [];
+  //   result = result.concat(this.getMovesInDirection(2, 2, boardData));
+  //   result = result.concat(this.getMovesInDirection(2, -2, boardData));
+  //   return result;
 
-  }
+  // }
   getQueenMoves() {
     let result = [];
 
-    result = result.concat(this.getMovesInDirection(+i, -i, boardData));
-    result = result.concat(this.getMovesInDirection(-i, -i, boardData));
-    result = result.concat(this.getMovesInDirection(-i, +i, boardData));
-    result = result.concat(this.getMovesInDirection(+i, +i, boardData));
+    result = result.concat(this.getMovesInDirection(+1, -1, 7, boardData));
+    result = result.concat(this.getMovesInDirection(-1, -1, 7, boardData));
+    result = result.concat(this.getMovesInDirection(-1, +1, 7, boardData));
+    result = result.concat(this.getMovesInDirection(+1, +1, 7, boardData));
     return result;
   }
   getKingMoves() {
     let result = [];
-    result = result.concat(this.getMovesInDirection(+i, -i, boardData));
-    result = result.concat(this.getMovesInDirection(-i, -i, boardData));
-    result = result.concat(this.getMovesInDirection(-i, +i, boardData));
-    result = result.concat(this.getMovesInDirection(+i, +i, boardData));
+    result = result.concat(this.getMovesInDirection(+1, -1, 7, boardData));
+    result = result.concat(this.getMovesInDirection(-1, -1, 7, boardData));
+    result = result.concat(this.getMovesInDirection(-1, +1, 7, boardData));
+    result = result.concat(this.getMovesInDirection(+1, +1, 7, boardData));
     return result;
 
   }
-  // checkEat(player) {
-  //   if (){}
-
-  // }
 }
 class BoardData {//the start of the game and adding the Pieces to the board.
   constructor(firstPlayer) {
@@ -175,7 +164,7 @@ class BoardData {//the start of the game and adding the Pieces to the board.
     selectedCell = boardEl.rows[row].cells[col];
     // If the cell - is in the possibleMoves list [[2,1], [1,0]]
     if (piece.getPossibleMoves().some(element => element.toString() === [row, col].toString())) {
-      this.removePiece(row, col);
+      let removedPiece = this.removePiece(row, col);
       // Remove img if there is a piece. Better than removeChild for case of empty cells.
       selectedCell.innerHTML = ''
       // Update new piece's position to the selected cell:
@@ -254,7 +243,7 @@ let selectedPiece;
 let cell;
 const BOARD_SIZE = 8;
 const boardEl = document.createElement("table");
-let currentPosition;
+
 function createMainBoard() {
   boardEl.classList.add("mainBoard");
   document.body.appendChild(boardEl);
@@ -277,7 +266,6 @@ function createMainBoard() {
 window.addEventListener('load', createMainBoard);
 
 function onCellClick(row, col) {
-  currentPosition = [row, col]
   selectedCell = boardEl.rows[row].cells[col];
 
   if (selectedPiece !== undefined && boardData.tryMove(selectedPiece, row, col)) {
