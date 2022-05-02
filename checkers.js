@@ -109,7 +109,6 @@ class Pieces {
   }
 
 }
-
 class BoardData {//the start of the game and adding the Pieces to the board.
   constructor(firstPlayer) {
     this.pieces = this.getInitialPieces();
@@ -130,11 +129,13 @@ class BoardData {//the start of the game and adding the Pieces to the board.
     for (let possibleMove of possibleMoves) {
       let possibleCell = boardEl.rows[possibleMove[0]].cells[possibleMove[1]];
       possibleCell.classList.add('possible-move');
+
     }
   }
   tryMove(piece, row, col) {
+
     selectedCell = boardEl.rows[row].cells[col];
-    // If the cell - [row, col] - is in the possibleMoves list [[2,1], [1,0]]
+    // If the cell - is in the possibleMoves list [[2,1], [1,0]]
     if (piece.getPossibleMoves().some(element => element.toString() === [row, col].toString())) {
       let removedPiece = this.removePiece(row, col);
       // Remove img if there is a piece. Better than removeChild for case of empty cells.
@@ -144,7 +145,7 @@ class BoardData {//the start of the game and adding the Pieces to the board.
       piece.col = col;
       selectedCell.appendChild(piece.img);
 
-      if (removedPiece && removedPiece.type === 'king')
+      if (!boardEl.innerHTML.includes("white") || !boardEl.innerHTML.includes("black"))
         this.gameOver()
       this.endTurn()
 
@@ -158,8 +159,8 @@ class BoardData {//the start of the game and adding the Pieces to the board.
     } else {
       this.currentPlayer = 'white_player';
     }
-    document.querySelector(".Player-1").classList.toggle("player--active");
-    document.querySelector(".Player-2").classList.toggle("player--active")
+    // document.querySelector(".Player-1").classList.toggle("player--active");
+    // document.querySelector(".Player-2").classList.toggle("player--active")
   }
   gameOver() {
     this.winner = this.currentPlayer;
@@ -238,6 +239,7 @@ window.addEventListener('load', createMainBoard);
 
 function onCellClick(row, col) {
   selectedCell = boardEl.rows[row].cells[col];
+
   if (selectedPiece !== undefined && boardData.tryMove(selectedPiece, row, col)) {
     boardData.clearBoard(boardEl);
     selectedPiece = undefined;
@@ -251,12 +253,4 @@ function onCellClick(row, col) {
     selectedCell.classList.add('selected');
     selectedPiece = piece;
   }
-}
-
-
-
-
-
-
-
-
+} 
