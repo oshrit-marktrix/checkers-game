@@ -30,7 +30,7 @@ class Pieces {
     }
     let moves;
 
-    let findMovesFunc = {
+    let findMovesFunc = {//get into the moves option and returned by the type.
       'white': ['getwhiteMoves'],
       'black': ['getblackMoves'],
       'queen': ['getQueenMoves'],
@@ -44,25 +44,13 @@ class Pieces {
     }
 
     return moves;
-    // let filteredMoves = [];
-    // for (let move of moves) {
-    //   const absoluteRow = move[0];
-    //   const absoluteCol = move[1];
-    //   if (absoluteRow >= 0 && absoluteRow <= 7 && absoluteCol >= 0 && absoluteCol <= 7) {
-    //     filteredMoves.push(move);
-
-
-    //   }
-    // }
-    // return filteredMoves;
   }
 
-  getMovesInDirection(directionRow, directionCol, limit, onlyEat, boardData) {
+  getMovesInDirection(directionRow, directionCol, limit, onlyEat, boardData) {//multiplayer eating method,controled by the direction of the move
     let result = [];
     let eat = false;
     let eatRow;
     let eatCol;
-    //if (this.type === 'white' || this.type === 'black') {
     for (let i = 1; i <= limit; i++) {
       let row = this.row + i * directionRow;
       let col = this.col + i * directionCol;
@@ -70,18 +58,47 @@ class Pieces {
 
         if (boardData.getPiece(row, col) === undefined) {
 
-          if (eat) {//multiplayer eating option
+          if (eat) {
             result.push([row, col, [[eatRow, eatCol]]]);
-            let piece1 = new Pieces(row, col, this.type, this.player, undefined);
-            let result1 = piece1.getMovesInDirection(+1, -1, limit, true, boardData);
-            for (let move of result1) {
-              move[2].push([eatRow, eatCol]);
+            //checking each direction multiplayer eating after the first jump.
+            if (!(directionRow === -1 && directionCol === 1)) {
+              let piece1 = new Pieces(row, col, this.type, this.player, undefined);
+              let result1 = piece1.getMovesInDirection(+1, -1, limit, true, boardData);
+              for (let move of result1) {//prevent the player position to be returned as a possible move.
+                move[2].push([eatRow, eatCol]);
+              }
+              result = result.concat(result1);
             }
-            result = result.concat(result1);
 
-            //result = result.concat(this.getMovesInDirection(-1, -1, limit, true, boardData));
-            //result = result.concat(this.getMovesInDirection(-1, +1, limit, true, boardData));
-            //result = result.concat(this.getMovesInDirection(+1, +1, limit, true, boardData));
+            if (!(directionRow === 1 && directionCol === 1)) {
+
+              let piece2 = new Pieces(row, col, this.type, this.player, undefined);
+              let result2 = piece2.getMovesInDirection(-1, -1, limit, true, boardData);
+              for (let move of result2) {
+                move[2].push([eatRow, eatCol]);
+              }
+              result = result.concat(result2);
+            }
+
+            if (!(directionRow === 1 && directionCol === -1)) {
+
+              let piece3 = new Pieces(row, col, this.type, this.player, undefined);
+              let result3 = piece3.getMovesInDirection(-1, +1, limit, true, boardData);
+              for (let move of result3) {
+                move[2].push([eatRow, eatCol]);
+              }
+              result = result.concat(result3);
+            }
+
+            if (!(directionRow === -1 && directionCol === -1)) {
+
+              let piece4 = new Pieces(row, col, this.type, this.player, undefined);
+              let result4 = piece4.getMovesInDirection(+1, +1, limit, true, boardData);
+              for (let move of result4) {
+                move[2].push([eatRow, eatCol]);
+              }
+              result = result.concat(result4);
+            }
           }
           else if (!onlyEat) {
             result.push([row, col, []]);
@@ -89,8 +106,7 @@ class Pieces {
           break;
         } else if (this.player === boardData.getPiece(row, col).player) {
           break;
-        } else //if (this.player !== boardData.getPiece(row, col).player) 
-        {
+        } else {
           eat = true;
           eatRow = row;
           eatCol = col;
@@ -103,38 +119,54 @@ class Pieces {
       }
     }
     return result;
-    // } else {
-    //   let row = this.row + directionRow;
-    //   let col = this.col + directionCol;
-    //   if (boardData.getPiece(row, col) === undefined) {
-    //     result.push([row, col]);
-    //   } else if (this.player !== boardData.getPiece(row, col).player) {
-    //     result.push([row, col]);
-    //     return result;
-    //   } else if (this.player === boardData.getPiece(row, col).player) {
-    //     return result;
-    //   }
-    //   return result;
-    // }
   }
   getwhiteMoves() {
     let result = [];
-    result = result.concat(this.getMovesInDirection(-1, 1, 2, false, boardData));
-    result = result.concat(this.getMovesInDirection(-1, -1, 2, false, boardData));
+
+    let result1 = this.getMovesInDirection(-1, 1, 2, false, boardData);
+    let eaton1 = result1.some(r => r[2].length > 0);
+    let result2 = this.getMovesInDirection(-1, -1, 2, false, boardData);
+    let eaton2 = result2.some(r => r[2].length > 0);
+
+    if (eaton1) {
+      result = result.concat(result1);
+      if (eaton2) {
+        result = result.concat(result2);
+      }
+    }
+    else if (!eaton2) {
+      result = result.concat(result1);
+      result = result.concat(result2);
+    }
+    else {
+      result = result.concat(result2);
+    }
+
     return result;
   }
-  // getwhiteEatMoves() {
-  //   let result = [];
-  //   result = result.concat(this.getMovesInDirection(-2, 2, boardData));
-  //   result = result.concat(this.getMovesInDirection(-2, -2, boardData));
-  //   return result;
-
-  // }
   getblackMoves() {
     let result = [];
-    result = result.concat(this.getMovesInDirection(1, 1, 2, false, boardData))
-    result = result.concat(this.getMovesInDirection(1, -1, 2, false, boardData))
+    let result1 = this.getMovesInDirection(1, 1, 2, false, boardData);
+    let eaton1 = result1.some(r => r[2].length > 0);
+    let result2 = this.getMovesInDirection(1, -1, 2, false, boardData);
+    let eaton2 = result2.some(r => r[2].length > 0);
+
+    if (eaton1) {
+      result = result.concat(result1);
+      if (eaton2) {
+        result = result.concat(result2);
+      }
+    }
+    else if (!eaton2) {
+      result = result.concat(result1);
+      result = result.concat(result2);
+    }
+    else {
+      result = result.concat(result2);
+    }
+
     return result;
+
   }
   // getblackEatMoves() {
   //   let result = [];
@@ -192,12 +224,16 @@ class BoardData {//the start of the game and adding the Pieces to the board.
 
     // If the cell - is in the possibleMoves list [[2,1], [1,0]]
     if (move != undefined) {
-      // Remove img if there is a piece. Better than removeChild for case of empty cells.
+      // Remove img if there is a piece.
       selectedCell.innerHTML = '';
       this.removePiece(row, col);
       // Update new piece's position to the selected cell:
       piece.row = row;
       piece.col = col;
+
+
+
+
       selectedCell.appendChild(piece.img);
 
       let eats = move[2];
@@ -207,28 +243,29 @@ class BoardData {//the start of the game and adding the Pieces to the board.
         this.removePiece(eat[0], eat[1]);
       }
       if (!boardEl.innerHTML.includes("white") || !boardEl.innerHTML.includes("black"))
-        this.gameOver()
-      this.endTurn()
+        this.gameOver();
+
+
+      this.endTurn();
 
       return true;
     }
     return false;
   }
+
   endTurn() {
     if (this.currentPlayer === 'white_player') {
       this.currentPlayer = 'black_player';
     } else {
       this.currentPlayer = 'white_player';
     }
-    // document.querySelector(".Player-1").classList.toggle("player--active");
-    // document.querySelector(".Player-2").classList.toggle("player--active")
   }
   gameOver() {
     this.winner = this.currentPlayer;
     let winnerMessage = document.createElement('div')
     winnerMessage.innerHTML = 'The winner is: ' + this.currentPlayer;
     winnerMessage.classList.add('winner')
-    boardEl.appendChild(winnerMessage);
+    document.body.appendChild(winnerMessage);
   }
   removePiece(row, col) {
     for (let i = 0; i < this.pieces.length; i++) {
@@ -315,9 +352,4 @@ function onCellClick(row, col) {
     selectedCell.classList.add('selected');
     selectedPiece = piece;
   }
-  // } console.log(cell);
-  // function royalty() {
-  //   if (col) {
-
-  //   }
 }
