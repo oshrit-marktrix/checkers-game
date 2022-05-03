@@ -5,7 +5,9 @@ class Pieces {
     this.col = col;
     this.type = type;
     this.player = player;
-    this.img = this.imgToElement(imgUrl);
+    if (imgUrl != undefined) {
+      this.img = this.imgToElement(imgUrl);
+    }
   }
 
   //  "tag" the img src as the player element.
@@ -55,8 +57,11 @@ class Pieces {
     // return filteredMoves;
   }
 
-  getMovesInDirection(directionRow, directionCol, limit, boardData) {
+  getMovesInDirection(directionRow, directionCol, limit, onlyEat, boardData) {
     let result = [];
+    let eat = false;
+    let eatRow;
+    let eatCol;
     //if (this.type === 'white' || this.type === 'black') {
     for (let i = 1; i <= limit; i++) {
       let row = this.row + i * directionRow;
@@ -64,12 +69,33 @@ class Pieces {
       if (row <= 7 && 0 <= row && 0 <= col && col <= 7) {
 
         if (boardData.getPiece(row, col) === undefined) {
-          result.push([row, col]);
-          //} else //if (this.player !== boardData.getPiece(row, col).player) {
+
+          if (eat) {//multiplayer eating option
+            result.push([row, col, [[eatRow, eatCol]]]);
+            let piece1 = new Pieces(row, col, this.type, this.player, undefined);
+            let result1 = piece1.getMovesInDirection(+1, -1, limit, true, boardData);
+            for (let move of result1) {
+              move[2].push([eatRow, eatCol]);
+            }
+            result = result.concat(result1);
+
+            //result = result.concat(this.getMovesInDirection(-1, -1, limit, true, boardData));
+            //result = result.concat(this.getMovesInDirection(-1, +1, limit, true, boardData));
+            //result = result.concat(this.getMovesInDirection(+1, +1, limit, true, boardData));
+          }
+          else if (!onlyEat) {
+            result.push([row, col, []]);
+          }
+          break;
+        } else if (this.player === boardData.getPiece(row, col).player) {
+          break;
+        } else //if (this.player !== boardData.getPiece(row, col).player) 
+        {
+          eat = true;
+          eatRow = row;
+          eatCol = col;
           //result.push([row, col]);
           //return result;
-          // } else if (this.player === boardData.getPiece(row, col).player) {
-          //   return result;
         }
       }
       else {
@@ -93,8 +119,8 @@ class Pieces {
   }
   getwhiteMoves() {
     let result = [];
-    result = result.concat(this.getMovesInDirection(-1, 1, 2, boardData));
-    result = result.concat(this.getMovesInDirection(-1, -1, 2, boardData));
+    result = result.concat(this.getMovesInDirection(-1, 1, 2, false, boardData));
+    result = result.concat(this.getMovesInDirection(-1, -1, 2, false, boardData));
     return result;
   }
   // getwhiteEatMoves() {
@@ -106,8 +132,8 @@ class Pieces {
   // }
   getblackMoves() {
     let result = [];
-    result = result.concat(this.getMovesInDirection(1, 1, 2, boardData))
-    result = result.concat(this.getMovesInDirection(1, -1, 2, boardData))
+    result = result.concat(this.getMovesInDirection(1, 1, 2, false, boardData))
+    result = result.concat(this.getMovesInDirection(1, -1, 2, false, boardData))
     return result;
   }
   // getblackEatMoves() {
@@ -162,16 +188,24 @@ class BoardData {//the start of the game and adding the Pieces to the board.
   tryMove(piece, row, col) {
 
     selectedCell = boardEl.rows[row].cells[col];
+    let move = piece.getPossibleMoves().find(element => element[0] == row && element[1] == col);
+
     // If the cell - is in the possibleMoves list [[2,1], [1,0]]
-    if (piece.getPossibleMoves().some(element => element.toString() === [row, col].toString())) {
-      let removedPiece = this.removePiece(row, col);
+    if (move != undefined) {
       // Remove img if there is a piece. Better than removeChild for case of empty cells.
-      selectedCell.innerHTML = ''
+      selectedCell.innerHTML = '';
+      this.removePiece(row, col);
       // Update new piece's position to the selected cell:
       piece.row = row;
       piece.col = col;
       selectedCell.appendChild(piece.img);
 
+      let eats = move[2];
+      for (let eat of eats) {
+        let eatenCell = boardEl.rows[eat[0]].cells[eat[1]];
+        eatenCell.innerHTML = '';
+        this.removePiece(eat[0], eat[1]);
+      }
       if (!boardEl.innerHTML.includes("white") || !boardEl.innerHTML.includes("black"))
         this.gameOver()
       this.endTurn()
