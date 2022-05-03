@@ -6,7 +6,7 @@ class BoardData {//the start of the game and adding the Pieces to the board.
         this.winner = undefined;
     }
 
-    
+
     clearBoard(boardEl) {// function that will delete all moves from the board
         for (let i = 0; i < BOARD_SIZE; i++) {
             for (let j = 0; j < BOARD_SIZE; j++) {
@@ -59,7 +59,6 @@ class BoardData {//the start of the game and adding the Pieces to the board.
         }
         return false;
     }
-
     endTurn() {
         if (this.currentPlayer === 'white_player') {
             this.currentPlayer = 'black_player';
