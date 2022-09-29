@@ -1,6 +1,6 @@
-#CHECKERS GAME
+**CHECKERS GAME**
 
-##About
+# About
 This game was developed after two weeks of learning HTML, CSS, and JavaScript for the course entrance exam. JavaScript.
 
 were given three days to complete the game. we entered 40 students, we were given three days to build the game from start to finish.
