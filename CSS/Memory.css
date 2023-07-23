@@ -1,0 +1,70 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.container {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.instructions {
+  margin-top: 10px;
+}
+
+.scoreboard {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+/* Default styles for 6 columns */
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 10px;
+  margin-top: 20px;
+}
+
+/* Media query for screens with a maximum width of 768px (first breakpoint) */
+@media screen and (max-width: 800px) {
+  .game-board {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Media query for screens with a maximum width of 480px (second breakpoint) */
+@media screen and (max-width: 600px) {
+  .game-board {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  width: 100px;
+  height: 100px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  content-visibility: hidden;
+}
+.flip {
+  content-visibility: auto;
+}
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

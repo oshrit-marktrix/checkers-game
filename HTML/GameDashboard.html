@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Links Page</title>
+    <link rel="stylesheet" href="../CSS/GameDashboard.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">Choose A Game:</h1>
+    <div class="container">
+      <div class="box" onclick="redirectToDashboard('HangGame.html')">
+        <img src="../IMG/HangGame.png" alt="Image 1" />
+      </div>
+      <div class="box" onclick="redirectToDashboard('GuessNum.html')">
+        <img src="../IMG/GuessGame.png" alt="Image 2" />
+      </div>
+      <div class="box" onclick="redirectToDashboard('RpsGame.html')">
+        <img src="../IMG/RpsGame.png" alt="Image 3" />
+      </div>
+      <div class="box" onclick="redirectToDashboard('Memory.html')">
+        <img src="../IMG/MemoryGame.png" alt="Image 4" />
+      </div>
+    </div>
+
+    <script>
+      function redirectToDashboard(href) {
+        window.location.href = href;
+      }
+    </script>
+  </body>
+</html>

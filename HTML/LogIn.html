@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>עמוד רישום והתחברות</title>
+    <link rel="stylesheet" href="../CSS/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>עמוד המשחקים</h1>
+      <img
+        src="https://i.pinimg.com/originals/72/3d/0a/723d0af616b1fe7d5c7e56a3532be3cd.png"
+        alt="לוגו"
+      />
+    </header>
+
+    <main>
+      <div class="background"></div>
+      <div class="form-container">
+        <h2>טופס כניסה</h2>
+        <form id="loginForm">
+          <label for="loginUsername">שם משתמש:</label>
+          <input type="text" id="loginUsername" required />
+          <label for="loginPassword">סיסמה:</label>
+          <input type="password" id="loginPassword" required />
+          <button type="submit">כניסה</button>
+          <p id="loginErrorMessage" class="error-message"></p>
+        </form>
+      </div>
+
+      <div class="form-container">
+        <h2>טופס רישום</h2>
+        <form id="signupForm">
+          <label for="signupUsername">שם משתמש:</label>
+          <input type="text" id="signupUsername" required />
+          <label for="signupPassword">סיסמה:</label>
+          <input type="password" id="signupPassword" required />
+          <button type="submit">רישום</button>
+          <p id="signupErrorMessage" class="error-message"></p>
+        </form>
+      </div>
+    </main>
+
+    <script src="../JS/script.js"></script>
+  </body>
+</html>

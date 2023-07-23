@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Card Game</title>
+    <link rel="stylesheet" href="../CSS/Memory.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Memory Card Matching Game</h1>
+      <p class="instructions">Match all the pairs of cards to win!</p>
+      <div class="scoreboard">
+        <span>Score: <span id="score">0</span></span>
+        <span>Time: <span id="timer">0</span>s</span>
+      </div>
+      <div class="game-board" id="game-board"></div>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+    <script src="../JS/Memory.js"></script>
+  </body>
+</html>
